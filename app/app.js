@@ -43,10 +43,9 @@ app.get('/edit/:id', (req, res, next) => {
   .then(async client => {
     var db = client.db('student-manager');
     var result = await db.collection('students').findOne({ "_id": ObjectId(id) });
-    var deptsResult = db.collection('departments').find();
+    var deptsResult = await db.collection('departments').find();
     var departments = [];
     await deptsResult.forEach((i) => { departments.push(i) });
-    console.log(result)
     if(!result) throw 'NOT_FOUND' + result;
     client.close();
     res.render('form', {student: result, departments: departments});
@@ -98,8 +97,8 @@ app.post('/update/:id', (req, res, next) => {
   MongoClient.connect(uri)
   .then(async client => {
     var db = client.db('student-manager');
-    await db.collection('students').updateOne(
-      { "_id": id },
+    var studentupdated = await db.collection('students').updateOne(
+      { "_id": ObjectId(id) },
       {
         $set: {
           "name": req.body.name,
@@ -117,12 +116,12 @@ app.post('/update/:id', (req, res, next) => {
   })
 })
 
-app.get('/:id', (req, res) => {
+app.get('/delete/:id', (req, res) => {
   var id = req.params.id;
   MongoClient.connect(uri)
   .then(client => {
     var db = client.db('student-manager');
-    db.collection('students').deleteOne({ "_id": id })
+    db.collection('students').deleteOne({ "_id": ObjectId(id) })
     .then(_ => {res.redirect('/');})
     .catch(err => { throw err });
   })

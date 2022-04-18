@@ -32,7 +32,7 @@
                         <td><%= students[i].name %></td>
                         <td><%= students[i].email %></td>
                         <td><%= students[i].department %></td>
-                        <td><a class="link-primary" href="/edit/<%= students[i]._id %>">Edit</a> <a class="link-danger" href="/<%= students[i]._id %>">Delete</a></td>
+                        <td><a class="link-primary" href="/edit/<%= students[i]._id %>">Edit</a> <a class="link-danger" href="/delete/<%= students[i]._id %>">Delete</a></td>
                     </tr>
                 <% } %>
             </tbody>
